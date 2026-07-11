@@ -820,10 +820,13 @@ function module:win(config)
 		if not curBtn then setSelectedTab(btn, section) end
 
 		local contents = {}
+		local _elOrder = 0
+		local function nextOrder() _elOrder = _elOrder + 1; return _elOrder end
 
 		function contents:label(text, icon)
 			text = checkText(text)
 			local holder = create("Frame", { Parent = section, BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 20) })
+			holder.LayoutOrder = nextOrder()
 
 			local iconLbl = create("ImageLabel", { Parent = holder, BackgroundTransparency = 1, Position = UDim2.new(0, 0, 0.5, -8), Size = UDim2.new(0, 16, 0, 16), Visible = false })
 			reg(iconLbl, "ImageColor3", "SubTextColor")
@@ -877,6 +880,7 @@ function module:win(config)
 		function contents:button(text, cb)
 			text = checkText(text)
 			local btnEl = create("TextButton", { Parent = section, Size = UDim2.new(1, 0, 0, theme.ElementHeight), BackgroundTransparency = theme.ElementBackgroundTransparency, AutoButtonColor = false, Text = text, TextSize = 13 })
+			btnEl.LayoutOrder = nextOrder()
 			reg(btnEl, "BackgroundColor3", "ElementBackground")
 			reg(btnEl, "TextColor3", "Text")
 			reg(btnEl, "Font", "Font")
@@ -910,6 +914,7 @@ function module:win(config)
 			if savedData[id] ~= nil then toggled = savedData[id] end
 
 			local holder = create("TextButton", { Parent = section, Size = UDim2.new(1, 0, 0, theme.ElementHeight), BackgroundTransparency = theme.ElementBackgroundTransparency, AutoButtonColor = false, Text = "" })
+			holder.LayoutOrder = nextOrder()
 			reg(holder, "BackgroundColor3", "ToggleBackground")
 			create("UICorner", { Parent = holder, CornerRadius = theme.ElementRadius })
 
@@ -987,6 +992,7 @@ function module:win(config)
 			if savedData[id] ~= nil then currentText = tostring(savedData[id]) end
 
 			local holder = create("Frame", { Parent = section, Size = UDim2.new(1, 0, 0, theme.ElementHeight), BackgroundTransparency = theme.ElementBackgroundTransparency })
+			holder.LayoutOrder = nextOrder()
 			reg(holder, "BackgroundColor3", "ElementBackground")
 			create("UICorner", { Parent = holder, CornerRadius = theme.ElementRadius })
 
@@ -1040,6 +1046,7 @@ function module:win(config)
 			if savedData[id] ~= nil then valStart = tonumber(savedData[id]) or default end
 
 			local holder = create("Frame", { Parent = section, Size = UDim2.new(1, 0, 0, theme.ElementHeight + 16), BackgroundTransparency = theme.ElementBackgroundTransparency })
+			holder.LayoutOrder = nextOrder()
 			reg(holder, "BackgroundColor3", "ElementBackground")
 			create("UICorner", { Parent = holder, CornerRadius = theme.ElementRadius })
 
@@ -1121,6 +1128,7 @@ function module:win(config)
 			if savedData[id] ~= nil then currentSelected = savedData[id] end
 
 			local holder = create("Frame", { Parent = section, Size = UDim2.new(1, 0, 0, theme.ElementHeight), BackgroundTransparency = theme.ElementBackgroundTransparency, ClipsDescendants = true })
+			holder.LayoutOrder = nextOrder()
 			reg(holder, "BackgroundColor3", "ElementBackground")
 			create("UICorner", { Parent = holder, CornerRadius = theme.ElementRadius })
 
@@ -1202,6 +1210,7 @@ function module:win(config)
 			if savedData[id] ~= nil then currentKey = tostring(savedData[id]) end
 
 			local holder = create("Frame", { Parent = section, Size = UDim2.new(1, 0, 0, theme.ElementHeight), BackgroundTransparency = theme.ElementBackgroundTransparency })
+			holder.LayoutOrder = nextOrder()
 			reg(holder, "BackgroundColor3", "ElementBackground")
 			create("UICorner", { Parent = holder, CornerRadius = theme.ElementRadius })
 
@@ -1295,6 +1304,7 @@ function module:win(config)
 			local pContent = checkText(config.Content or "")
 
 			local holder = create("Frame", { Parent = section, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = theme.ElementBackgroundTransparency })
+			holder.LayoutOrder = nextOrder()
 			reg(holder, "BackgroundColor3", "ElementBackground")
 			create("UICorner", { Parent = holder, CornerRadius = theme.ElementRadius })
 			create("UIPadding", { Parent = holder, PaddingLeft = UDim.new(0, 12), PaddingRight = UDim.new(0, 12), PaddingTop = UDim.new(0, 10), PaddingBottom = UDim.new(0, 10) })
@@ -1334,6 +1344,7 @@ function module:win(config)
 			end
 
 			local holder = create("Frame", { Parent = section, Size = UDim2.new(1, 0, 0, theme.ElementHeight), BackgroundTransparency = theme.ElementBackgroundTransparency, ClipsDescendants = true })
+			holder.LayoutOrder = nextOrder()
 			reg(holder, "BackgroundColor3", "ElementBackground")
 			create("UICorner", { Parent = holder, CornerRadius = theme.ElementRadius })
 
@@ -1444,6 +1455,7 @@ function module:win(config)
 		end
 		function contents:CreateDivider()
 			local holder = create("Frame", { Parent = section, Size = UDim2.new(1, 0, 0, 9), BackgroundTransparency = 1 })
+			holder.LayoutOrder = nextOrder()
 			local line = create("Frame", { Parent = holder, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, 0), Size = UDim2.new(1, 0, 0, 1), BorderSizePixel = 0, BackgroundTransparency = 0.85 })
 			reg(line, "BackgroundColor3", "SubTextColor")
 
