@@ -8,24 +8,8 @@
 
 return {
 	{
-		Name   = "Beach Escape",
+		Name   = "Beach Escape | +1 Speed",
 		Status = "Working",
 		GameId = 113780042580709,
 	},
-	{
-		Name   = "Blade Ball",
-		Status = "Partial",
-		GameId = 13772394625,
-	},
-	{
-		Name   = "Fisch",
-		Status = "Testing",
-		GameId = 16732694052,
-	},
-	-- Add more games below:
-	-- {
-	-- 	Name   = "My Game",
-	-- 	Status = "Working",
-	-- 	GameId = 123456789,
-	-- },
 }
