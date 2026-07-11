@@ -4,7 +4,7 @@
 
 	Repo structure expected on GitHub:
 	  /hubinit.lua         <- this file
-	  /testlib.lua         <- VoidLib
+	  /libary.lua         <- Vantex
 	  /ui.lua              <- window + tabs config
 	  /home.lua            <- home tab content
 	  /gamelist.lua        <- game list data
@@ -20,14 +20,13 @@
 local GIT_BASE = "https://raw.githubusercontent.com/PixelCoreStudio/Vantex-AI_Brainrot-Police/refs/heads/main/"
 
 local function getgitpath(folder)
-	-- Ensure GIT_BASE always has a trailing slash, regardless of how the user set it
 	local base = GIT_BASE:match("/$") and GIT_BASE or (GIT_BASE .. "/")
 	return base .. (folder and folder .. "/" or "")
 end
-getgenv().getgitpath = getgitpath  -- globally accessible from game scripts too
+getgenv().getgitpath = getgitpath
 
--- ── LOAD VOIDLIB ─────────────────────────────────────────
-local VoidLib = loadstring(game:HttpGet(getgitpath() .. "libary.lua"))()
+-- ── LOAD Vantex ─────────────────────────────────────────
+local Vantex = loadstring(game:HttpGet(getgitpath() .. "libary.lua"))()
 
 -- ── BUILD WINDOW + TABS (ui.lua) ─────────────────────────
 local function safeLoad(url, label)
@@ -43,8 +42,7 @@ local function safeLoad(url, label)
 end
 
 local setupUI   = safeLoad(getgitpath() .. "ui.lua",   "ui.lua")
-local tabs      = setupUI(VoidLib)
--- tabs = { Home, Game, GameList, Settings, Credits }
+local tabs      = setupUI(Vantex)
 
 -- ── HOME TAB (home.lua) ───────────────────────────────────
 local setupHome = safeLoad(getgitpath() .. "home.lua", "home.lua")
@@ -71,7 +69,7 @@ for i, entry in ipairs(gamelistData) do
 	tabs.GameList:button("Join: " .. entry.Name, function()
 		local ok, err = pcall(function() TeleportService:Teleport(entry.GameId) end)
 		if not ok then
-			VoidLib:Notify({ Title = "Teleport Failed", Content = tostring(err), Duration = 4, Image = "alert-triangle" })
+			Vantex:Notify({ Title = "Teleport Failed", Content = tostring(err), Duration = 4, Image = "alert-triangle" })
 		end
 	end)
 
@@ -84,7 +82,6 @@ local placeId = tostring(game.PlaceId)
 local function loadGameScript()
 	local src
 
-	-- Dev mode: load from executor's local workspace folder
 	if getgenv().FileScripts then
 		local path = "games/" .. placeId .. ".lua"
 		if isfile and isfile(path) then
@@ -92,7 +89,6 @@ local function loadGameScript()
 		end
 	end
 
-	-- Production: fetch from GitHub
 	if not src then
 		local ok, res = pcall(game.HttpGet, game, getgitpath("games") .. placeId .. ".lua")
 		if ok and type(res) == "string" and not res:match("^404") and not res:match("Not Found") then
