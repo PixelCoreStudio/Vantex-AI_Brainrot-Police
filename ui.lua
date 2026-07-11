@@ -76,8 +76,8 @@ return function(VoidLib)
 	})
 
 	Credits:CreateParagraph({
-		Title = "Special Thanks",
-		Content = "VoidLib / VantexUI",
+		Title = "Contributors",
+		Content = "none",
 	})
 
 	Credits:CreateDivider()
