@@ -32,7 +32,7 @@ return function(VoidLib)
 	})
 
 	-- ── TABS ─────────────────────────────────────────────────
-	local Home     = window:tab("Home",      "house")
+	local Home     = window:tab("Home",      "mail")
 	local Game     = window:tab("Game",      "swords")
 	local GameList = window:tab("Game List", "list")
 	local Settings = window:tab("Settings",  "settings")
