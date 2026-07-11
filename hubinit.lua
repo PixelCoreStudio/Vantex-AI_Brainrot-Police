@@ -17,10 +17,12 @@
 ]]
 
 -- ── CONFIG ────────────────────────────────────────────────
-local GIT_BASE = "https://raw.githubusercontent.com/PixelCoreStudio/Vantex-AI_Brainrot-Police/refs/heads/main"
+local GIT_BASE = "https://raw.githubusercontent.com/PixelCoreStudio/Vantex-AI_Brainrot-Police/refs/heads/main/"
 
 local function getgitpath(folder)
-	return GIT_BASE .. (folder and folder .. "/" or "")
+	-- Ensure GIT_BASE always has a trailing slash, regardless of how the user set it
+	local base = GIT_BASE:match("/$") and GIT_BASE or (GIT_BASE .. "/")
+	return base .. (folder and folder .. "/" or "")
 end
 getgenv().getgitpath = getgitpath  -- globally accessible from game scripts too
 
@@ -28,16 +30,28 @@ getgenv().getgitpath = getgitpath  -- globally accessible from game scripts too
 local VoidLib = loadstring(game:HttpGet(getgitpath() .. "libary.lua"))()
 
 -- ── BUILD WINDOW + TABS (ui.lua) ─────────────────────────
-local setupUI = loadstring(game:HttpGet(getgitpath() .. "ui.lua"))()
-local tabs = setupUI(VoidLib)
+local function safeLoad(url, label)
+	local ok, src = pcall(game.HttpGet, game, url)
+	if not ok or not src or src:match("^404") or src:match("Not Found") then
+		error("[Hub] Failed to fetch " .. label .. " from: " .. url, 2)
+	end
+	local fn, err = loadstring(src)
+	if not fn then
+		error("[Hub] Failed to parse " .. label .. ": " .. tostring(err), 2)
+	end
+	return fn()
+end
+
+local setupUI   = safeLoad(getgitpath() .. "ui.lua",   "ui.lua")
+local tabs      = setupUI(VoidLib)
 -- tabs = { Home, Game, GameList, Settings, Credits }
 
 -- ── HOME TAB (home.lua) ───────────────────────────────────
-local setupHome = loadstring(game:HttpGet(getgitpath() .. "home.lua"))()
+local setupHome = safeLoad(getgitpath() .. "home.lua", "home.lua")
 setupHome(tabs.Home)
 
 -- ── GAME LIST TAB (gamelist.lua) ─────────────────────────
-local gamelistData = loadstring(game:HttpGet(getgitpath() .. "gamelist.lua"))()
+local gamelistData = safeLoad(getgitpath() .. "gamelist.lua", "gamelist.lua")
 
 local statusColors = {
 	Working    = Color3.fromRGB(60,  210, 110),
