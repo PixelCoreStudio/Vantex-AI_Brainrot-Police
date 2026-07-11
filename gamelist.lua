@@ -15,6 +15,6 @@ return {
 	{
 		Name = "Lick a Brainrot",
 		Status = "Working",
-		GameId = 112500097711893
-	}
+		GameId = 112500097711893,
+	},
 }
