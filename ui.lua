@@ -10,17 +10,17 @@ return function(VoidLib)
 
 	-- ── WINDOW ───────────────────────────────────────────────
 	local window = VoidLib:win({
-		Name = "My Hub",                         -- ← change this
-		Icon = "layout-dashboard",
-		LoadingTitle = "My Hub",
-		LoadingSubtitle = "Loading...",
-		ShowText = "layout-dashboard",
+		Name = "Vantex AI/Brainrot Police",                         -- ← change this
+		Icon = "siren",
+		LoadingTitle = "Vantex AI/Brainrot Police",
+		LoadingSubtitle = "by Pixel Core",
+		ShowText = "Vantex AI/Brainrot Police",
 		ToggleUIKeybind = "K",
 		TabsPosition = "Left",                   -- "Left" or "Top"
 		Theme = "default",                       -- "default", "light", "glass", or any themes/*.lua name
 		ConfigurationSaving = {
 			Enable = true,
-			FolderName = "MyHub",
+			FolderName = "VantexAiBrainrotPolice",
 			FileName = "Config",
 			All = false,                         -- only elements with Save = true are persisted
 		},
@@ -65,14 +65,14 @@ return function(VoidLib)
 
 	-- ── CREDITS TAB (built here since it's always the same) ──
 	Credits:CreateParagraph({
-		Title = "My Hub",
+		Title = "Vantex AI/Brainrot Police",
 		Content = "Version 1.0.0",
 	})
 	Credits:CreateDivider()
 
 	Credits:CreateParagraph({
 		Title = "Developer",
-		Content = "YourName",               -- ← change this
+		Content = "Pixel Core",               -- ← change this
 	})
 
 	Credits:CreateParagraph({

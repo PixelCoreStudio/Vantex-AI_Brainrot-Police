@@ -11,7 +11,7 @@ local module = {}
 -- Fixed folder that hosts individual theme files (see themes/default.lua for the
 -- template). Update this once to point at your own repo's "themes" folder - end
 -- users of your script never set this themselves, they only pass Theme = "name".
-local THEMES_FOLDER = "https://raw.githubusercontent.com/PixelCoreStudio/Vantex/refs/heads/main/themes/"
+local THEMES_FOLDER = "https://raw.githubusercontent.com/PixelCoreStudio/Vantex-AI_Brainrot-Police/refs/heads/main/themes/"
 
 local ts = cloneref(game:GetService("TweenService"))
 local lt = cloneref(game:GetService("Lighting"))

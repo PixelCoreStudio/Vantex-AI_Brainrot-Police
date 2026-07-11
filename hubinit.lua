@@ -17,7 +17,7 @@
 ]]
 
 -- ── CONFIG ────────────────────────────────────────────────
-local GIT_BASE = "https://raw.githubusercontent.com/PixelCoreStudio/Vantex/refs/heads/main/"
+local GIT_BASE = "https://raw.githubusercontent.com/PixelCoreStudio/Vantex-AI_Brainrot-Police/refs/heads/main"
 
 local function getgitpath(folder)
 	return GIT_BASE .. (folder and folder .. "/" or "")
@@ -25,7 +25,7 @@ end
 getgenv().getgitpath = getgitpath  -- globally accessible from game scripts too
 
 -- ── LOAD VOIDLIB ─────────────────────────────────────────
-local VoidLib = loadstring(game:HttpGet(getgitpath() .. "testlib.lua"))()
+local VoidLib = loadstring(game:HttpGet(getgitpath() .. "libary.lua"))()
 
 -- ── BUILD WINDOW + TABS (ui.lua) ─────────────────────────
 local setupUI = loadstring(game:HttpGet(getgitpath() .. "ui.lua"))()

@@ -9,11 +9,11 @@ return function(tab)
 	-- ── CONFIG ────────────────────────────────────────────────
 	-- Edit these values to customize the Home tab.
 
-	local HUB_NAME    = "My Hub"
+	local HUB_NAME    = "Vantex AI/Brainrot Police"
 	local HUB_VERSION = "v1.0.0"
 	local HUB_STATUS  = "Undetected"   -- "Undetected" | "Detected" | "Updating"
 	local DISCORD     = "discord.gg/AqZmmXQDm3"
-	local AUTHOR      = "YourName"
+	local AUTHOR      = "Pixel Core"
 
 	local ANNOUNCEMENTS = {
 		"Welcome to My Hub!",
