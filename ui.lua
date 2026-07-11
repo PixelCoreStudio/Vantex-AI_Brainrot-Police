@@ -40,7 +40,7 @@ return function(Vantex)
 	local themeDropdown = Settings:dropdown(
 		"Theme",
 		"settingsTheme",
-		{"default", "light", "glass"},
+		{"default", "light"},
 		"default",
 		function(selected)
 			Vantex:Notify({
