@@ -1,16 +1,5 @@
---[[
-    VoidLib Custom UI Library - FULL COMPLETED VERSION
-    - Rayfield-Lucide Spritesheet Support (Topbar, Tabs & Mobile Button)
-    - Fully Draggable Mobile Button & Main Window
-    - Configuration Saving & Auto-Load System
-    - Built-in Discord Invite & Key System Handles
-]]
-
 local module = {}
 
--- Fixed folder that hosts individual theme files (see themes/default.lua for the
--- template). Update this once to point at your own repo's "themes" folder - end
--- users of your script never set this themselves, they only pass Theme = "name".
 local THEMES_FOLDER = "https://raw.githubusercontent.com/PixelCoreStudio/Vantex-AI_Brainrot-Police/refs/heads/main/themes/"
 
 local ts = cloneref(game:GetService("TweenService"))
@@ -102,8 +91,6 @@ module.Theme = {
 	WindowStrokeTransparency = 0.45,
 
 	-- Blur (game background blur when the window is visible, 0 = disabled)
-	-- Uses Roblox's BlurEffect in Lighting - blurs the entire game world behind
-	-- the window, which is exactly how glassmorphism works.
 	Blur = 0,
 
 	-- Fallback window size/position (see WindowSize in VoidLib:win for the preferred way to set this per-window)
@@ -338,11 +325,6 @@ function module:win(config)
 	local theme = {}
 	for k, v in pairs(module.Theme) do theme[k] = v end
 
-	-- Theme = "somename" checks THEMES_FOLDER (a fixed URL near the top of this file)
-	-- for a matching "somename.lua" and uses it if found, otherwise silently falls
-	-- back to the built-in default theme. Theme = "Custom" (or omitted) skips this
-	-- entirely and relies only on ThemeOverrides below, which still applies on top
-	-- either way.
 	local themeName = config.Theme
 	if type(themeName) == "string" and themeName ~= "" and themeName:lower() ~= "custom" then
 		local themeUrl = THEMES_FOLDER .. themeName .. ".lua"
@@ -366,11 +348,6 @@ function module:win(config)
 		for k, v in pairs(config.ThemeOverrides) do theme[k] = v end
 	end
 
-	-- IMPORTANT: shadow the module-level reg() with one that reads from THIS
-	-- window's theme table (including ThemeOverrides / a loaded named theme),
-	-- instead of the global module.Theme default. Every element-creation
-	-- function below is defined inside this function, so they all pick up
-	-- this local version instead of the outer one.
 	local function reg(instance, property, themeKey)
 		if instance and theme[themeKey] then
 			instance[property] = theme[themeKey]
@@ -392,9 +369,6 @@ function module:win(config)
 	local cfgSettings = config.ConfigurationSaving or { Enabled = false }
 	local isSavingEnabled = (cfgSettings.Enabled == true or cfgSettings.Enable == true)
 
-	-- When All is true (default), every element with an id gets saved automatically,
-	-- exactly like before. When explicitly set to false, only elements that were
-	-- created with `Save = true` in their own config/opts get persisted.
 	local saveAll = (cfgSettings.All ~= false)
 	local function canSaveElement(opts)
 		return saveAll or (type(opts) == "table" and opts.Save == true)
@@ -472,8 +446,6 @@ function module:win(config)
 		local keyFileName = (keySettings.FileName or "Key") .. ".txt"
 		local validKeys = keySettings.Key or {"Hello"}
 
-		-- GetKey = { "link or text", { copy = { Text = "...", Notify = {Title, Content, Duration, Image} } } }
-		-- Only "copy" is supported (opening arbitrary websites isn't reliably possible from a Roblox script).
 		local getKeyValue, getKeyOptions = nil, {}
 		if type(keySettings.GetKey) == "table" then
 			getKeyValue = keySettings.GetKey[1]
@@ -496,10 +468,6 @@ function module:win(config)
 
 		if type(validKeys) == "string" then validKeys = {validKeys} end
 
-		-- LinkToKey = "https://.../key.txt" - fetches the valid key(s) from a remote
-		-- text file instead of (or in addition to) hardcoding them in the script.
-		-- One key per line; empty lines are ignored. If the fetch fails, the
-		-- hardcoded `Key` list above is used as a fallback.
 		if type(keySettings.LinkToKey) == "string" and keySettings.LinkToKey ~= "" then
 			pcall(function()
 				local success, res = pcall(game.HttpGet, game, keySettings.LinkToKey)
@@ -531,12 +499,8 @@ function module:win(config)
 			local kStroke = create("UIStroke", { Parent = keyFrame, Thickness = 1, Transparency = theme.WindowStrokeTransparency, ApplyStrokeMode = Enum.ApplyStrokeMode.Border })
 			reg(kStroke, "Color", "Accent")
 
-			-- Drag handle: covers just the title/subtitle area so it doesn't block the
-			-- textbox/buttons below it, exactly like the main window's topbar.
 			local dragHandle = create("Frame", { Parent = keyFrame, BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 60) })
 
-			-- Close button (top-right corner) - fully shuts the key window AND aborts
-			-- the rest of the window setup, so the caller's script doesn't error out.
 			local closeBtn = create("TextButton", { Parent = keyFrame, AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -10, 0, 10), Size = UDim2.new(0, 24, 0, 24), Text = "X", TextSize = 14, BackgroundTransparency = 1, AutoButtonColor = false, ZIndex = 21 })
 			reg(closeBtn, "TextColor3", "SubTextColor")
 			reg(closeBtn, "Font", "FontBold")
@@ -614,14 +578,8 @@ function module:win(config)
 	-------------------------------------------------------------------
 	-- LAYOUT: TABS POSITION & WINDOW SIZE
 	-------------------------------------------------------------------
-	-- TabsPosition = "Left" (default, sidebar like before) or "Top" (horizontal tab row
-	-- under the topbar, Rayfield-style minimal layout). Everything else (window size
-	-- defaults, tab bar orientation, content area) adapts automatically to this choice.
 	local tabsPosition = (config.TabsPosition == "Top") and "Top" or "Left"
 
-	-- WindowSize: leave unset (or "Default") for a size preset that matches TabsPosition,
-	-- or pass a table { Width = ..., Height = ... } for a fully custom size. Everything
-	-- (tab bar, content area, centering) automatically adapts to whatever size is chosen.
 	local defaultWindowDims = {
 		Left = { 550, 350 },
 		Top = { 620, 400 },
@@ -637,14 +595,12 @@ function module:win(config)
 	end
 	local windowSize = UDim2.new(0, windowWidth, 0, windowHeight)
 
-	-- Auto-center for whatever size was picked, unless the caller explicitly set a
-	-- custom WindowPosition via ThemeOverrides (in which case we respect that instead).
 	local windowPosition = theme.WindowPosition
 	if not (config.ThemeOverrides and config.ThemeOverrides.WindowPosition) then
 		windowPosition = UDim2.new(0.5, -windowWidth / 2, 0.5, -windowHeight / 2)
 	end
 
-	local tabBarSize = 44 -- height of the horizontal tab row when TabsPosition == "Top"
+	local tabBarSize = 44
 
 	-------------------------------------------------------------------
 	-- MAIN UI WINDOW
@@ -718,9 +674,6 @@ function module:win(config)
 		end
 	end)
 
-	-- Blur effect: creates (or finds an existing) BlurEffect in Lighting and
-	-- tweens its Size between theme.Blur (window visible) and 0 (window hidden).
-	-- Only active when theme.Blur > 0 to avoid touching the game world otherwise.
 	local blurEffect = nil
 	if theme.Blur and theme.Blur > 0 then
 		blurEffect = lt:FindFirstChildOfClass("BlurEffect")
@@ -1233,10 +1186,8 @@ function module:win(config)
 		function contents:keybind(text, id, default, cb, opts)
 			text = checkText(text)
 			if typeof(id) == "EnumItem" then
-				-- old-style call: keybind(text, defaultKeyEnum, callback)
 				cb = default; default = id; id = text
 			elseif type(id) == "string" and type(default) == "function" and cb == nil then
-				-- old-style call: keybind(text, "F", callback) -- no explicit id given
 				cb = default; default = id; id = text
 			end
 			id = tostring(id)
