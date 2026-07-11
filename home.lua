@@ -11,18 +11,16 @@ return function(tab)
 
 	local HUB_NAME    = "Vantex AI/Brainrot Police"
 	local HUB_VERSION = "v1.0.0"
-	local HUB_STATUS  = "Undetected"   -- "Undetected" | "Detected" | "Updating"
+	local HUB_STATUS  = "Working"   -- "Undetected" | "Detected" | "Updating"
 	local DISCORD     = "discord.gg/AqZmmXQDm3"
 	local AUTHOR      = "Pixel Core"
 
 	local ANNOUNCEMENTS = {
-		"Welcome to My Hub!",
-		"Check the Game tab to see if your game is supported.",
-		"Join the Discord for the latest updates.",
+		"Just released games coming soon!",
 	}
 
 	local STATUS_COLORS = {
-		Undetected = Color3.fromRGB(60,  210, 110),
+		Working = Color3.fromRGB(60,  210, 110),
 		Detected   = Color3.fromRGB(220,  55,  55),
 		Updating   = Color3.fromRGB(255, 180,  40),
 	}
