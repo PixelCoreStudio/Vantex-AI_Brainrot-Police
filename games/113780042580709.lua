@@ -23,6 +23,8 @@ end
 return function(section)
     local e = loadstring(game:HttpGet(getgitpath("src").."elements.lua"))()(section)
 
+    e:separator("Speed")
+
     e:toggle("Auto Farm Speed", false, function(v) 
         _G.AddSpeed = v
 
@@ -31,6 +33,8 @@ return function(section)
             wait()
         end
     end)
+
+    e:separator("Teleport")
 
     e:button("TP max wins", function()
         teleport()
