@@ -813,7 +813,7 @@ function module:win(config)
 
 		local section = create("ScrollingFrame", { Name = title, Parent = sectionsHolder, BackgroundTransparency = 1, BorderSizePixel = 0, Size = UDim2.new(1, 0, 1, 0), CanvasSize = UDim2.new(0, 0, 0, 0), AutomaticCanvasSize = Enum.AutomaticSize.Y, ScrollBarThickness = 3, Visible = false })
 		reg(section, "ScrollBarImageColor3", "Accent")
-		create("UIListLayout", { Parent = section, Padding = UDim.new(0, 6) })
+		create("UIListLayout", { Parent = section, Padding = UDim.new(0, 6), SortOrder = Enum.SortOrder.LayoutOrder })
 		create("UIPadding", { Parent = section, PaddingTop = UDim.new(0, 10), PaddingBottom = UDim.new(0, 10), PaddingLeft = UDim.new(0, 10), PaddingRight = UDim.new(0, 10) })
 
 		btn.MouseButton1Click:Connect(function() setSelectedTab(btn, section) end)
