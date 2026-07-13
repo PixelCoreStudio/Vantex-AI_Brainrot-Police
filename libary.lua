@@ -691,7 +691,7 @@ function module:win(config)
 
 	local function setUIVisibility(visible)
 		main.Visible = visible
-		windowShadow.Visible = visible
+		--windowShadow.Visible = visible
 		mobileBtn.Visible = isMobile and not visible
 		if blurEffect then
 			ts:Create(blurEffect, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), { Size = visible and theme.Blur or 0 }):Play()
