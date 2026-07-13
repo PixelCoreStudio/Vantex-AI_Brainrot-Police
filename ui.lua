@@ -1,93 +1,109 @@
 return function(Vantex)
+	local HttpService = game:GetService("HttpService")
+	local RunService  = game:GetService("RunService")
+	local VirtualUser = game:GetService("VirtualUser")
 
-	-- ── WINDOW ───────────────────────────────────────────────
+	local configPath = "VantexAiBrainrotPolice/Config.json"
+	local savedTheme  = "default"
+	local savedToggle = "K"
+
+	if isfile and isfile(configPath) then
+		local ok, data = pcall(function()
+			return HttpService:JSONDecode(readfile(configPath))
+		end)
+		if ok and data then
+			if data.settingsTheme     then savedTheme  = tostring(data.settingsTheme)  end
+			if data.settingsToggleKey then savedToggle = tostring(data.settingsToggleKey) end
+		end
+	end
+
 	local window = Vantex:win({
-		Name = "Vantex AI/Brainrot Police",
-		Icon = "siren",
-		LoadingTitle = "Vantex AI/Brainrot Police",
+		Name            = "Vantex AI/Brainrot Police",
+		Icon            = "siren",
+		LoadingTitle    = "Vantex AI/Brainrot Police",
 		LoadingSubtitle = "by Pixel Core",
-		ShowText = "Vantex AI/Brainrot Police",
-		ToggleUIKeybind = "K",
-		TabsPosition = "Left",
-		Theme = "default",
+		ShowText        = "Vantex AI/Brainrot Police",
+		TabsPosition    = "Left",
+		Theme           = savedTheme,
 		ConfigurationSaving = {
-			Enable = true,
+			Enable     = true,
 			FolderName = "VantexAiBrainrotPolice",
-			FileName = "Config",
-			All = false,
+			FileName   = "Config",
+			All        = false,
 		},
 		Discord = {
-			Enable = true,
-			Invite = "AqZmmXQDm3",
+			Enable       = true,
+			Invite       = "AqZmmXQDm3",
 			RememberJoins = true,
 		},
 	})
 
-	-- ── TABS ─────────────────────────────────────────────────
 	local Home     = window:tab("Home",      "mail")
 	local Game     = window:tab("Game",      "swords")
 	local GameList = window:tab("Game List", "list")
 	local Settings = window:tab("Settings",  "settings")
 	local Credits  = window:tab("Credits",   "heart")
 
-	-- ── SETTINGS TAB (built here since it's always the same) ─
-	Settings:CreateParagraph({
-		Title = "Interface",
-		Content = "Customize the hub's appearance and behavior.",
-	})
+	Settings:CreateParagraph({ Title = "Interface", Content = "Customize the hub." })
 	Settings:CreateDivider()
 
-	local themeDropdown = Settings:dropdown(
+	Settings:dropdown(
 		"Theme",
 		"settingsTheme",
 		{"default", "light"},
-		"default",
+		savedTheme,
 		function(selected)
 			Vantex:Notify({
-				Title = "Theme Changed",
-				Content = "Restart the hub to apply the '" .. selected .. "' theme.",
+				Title   = "Theme gespeichert",
+				Content = "'" .. selected .. "' wird beim nächsten Start angewendet.",
 				Duration = 4,
-				Image = "palette",
+				Image   = "palette",
 			})
 		end,
 		{ Save = true }
 	)
 
-	Settings:keybind("Toggle UI", "settingsToggleKey", Enum.KeyCode.K, function() end, { Save = true })
+	Settings:keybind(
+		"Toggle UI",
+		"settingsToggleKey",
+		savedToggle,
+		function()
+			window:SetVisible(not window:IsVisible())
+		end,
+		{ Save = true }
+	)
 
-	-- ── CREDITS TAB (built here since it's always the same) ──
-	Credits:CreateParagraph({
-		Title = "Vantex AI/Brainrot Police",
-		Content = "Version 1.0.0",
-	})
+	Settings:CreateDivider()
+
+	local afkConn
+	Settings:toggle("Anti-AFK", "antiAfk", false, function(state)
+		if state then
+			afkConn = game:GetService("Players").LocalPlayer.Idled:Connect(function()
+				VirtualUser:Button2Down(Vector2.new(0, 0), CFrame.new())
+				task.wait(1)
+				VirtualUser:Button2Up(Vector2.new(0, 0), CFrame.new())
+			end)
+		else
+			if afkConn then afkConn:Disconnect(); afkConn = nil end
+		end
+	end, { Save = true })
+
+	Settings:toggle("Disable 3D Rendering", "disable3d", false, function(state)
+		RunService:Set3dRenderingEnabled(not state)
+	end, { Save = true })
+
+	Credits:CreateParagraph({ Title = "Vantex AI/Brainrot Police", Content = "Version 1.0.0" })
 	Credits:CreateDivider()
-
-	Credits:CreateParagraph({
-		Title = "Developer",
-		Content = "Pixel Core",
-	})
-
-	Credits:CreateParagraph({
-		Title = "Designer",
-		Content = "Pixel Core",
-	})
-
-	Credits:CreateParagraph({
-		Title = "Contributors",
-		Content = "none",
-	})
-
+	Credits:CreateParagraph({ Title = "Developer", Content = "Pixel Core" })
+	Credits:CreateParagraph({ Title = "Contributors", Content = "none" })
 	Credits:CreateDivider()
-
 	Credits:label("Join the Discord for updates and support.", "discord")
-
 	Credits:button("Copy Discord Link", function()
 		local clip = setclipboard or toclipboard
 		if clip then pcall(clip, "https://discord.gg/AqZmmXQDm3") end
-		Vantex:Notify({ Title = "Copied", Content = "Discord link copied to clipboard.", Duration = 3, Image = "check" })
+		Vantex:Notify({ Title = "Copied", Content = "Discord link copied.", Duration = 3, Image = "check" })
 	end)
 
-	-- ── RETURN TAB REFERENCES ─────────────────────────────────
 	return {
 		Home     = Home,
 		Game     = Game,
