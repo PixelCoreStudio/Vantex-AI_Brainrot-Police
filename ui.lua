@@ -105,19 +105,25 @@ return function(Vantex)
 	end)
 
 	local UserInputService = game:GetService("UserInputService")
-	
+	local uiVisible = true
+
 	UserInputService.InputBegan:Connect(function(input, gameProcessed)
 		if gameProcessed then return end 
 		
-		local currentKeyStr = tostring(toggleuikey:Get())
+		local rawKey = toggleuikey:Get()
+		local targetKeyCode = nil
 		
-		local success, targetKeyCode = pcall(function()
-			return Enum.KeyCode[currentKeyStr]
-		end)
+		if typeof(rawKey) == "EnumItem" then
+			targetKeyCode = rawKey
+		elseif type(rawKey) == "string" then
+			pcall(function()
+				targetKeyCode = Enum.KeyCode[rawKey]
+			end)
+		end
 		
-		if success and input.KeyCode == targetKeyCode then
-			local currentVisibility = window:IsVisible()
-			Vantex:SetVisible(not currentVisibility)
+		if targetKeyCode and input.KeyCode == targetKeyCode then
+			uiVisible = not uiVisible
+			Vantex:SetVisible(uiVisible)
 		end
 	end)
 	
