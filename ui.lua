@@ -25,8 +25,7 @@ return function(Vantex)
 		TabsPosition    = "Left",
 		Theme           = savedTheme,
 		
-		-- Wir lassen den Library-Keybind stumm auf Unknown, damit er uns nicht stört
-		ToggleUIKeybind = "", 
+		ToggleUIKeybind = "F24",
 		
 		ConfigurationSaving = {
 			Enable     = true,
@@ -66,7 +65,6 @@ return function(Vantex)
 		{ Save = true }
 	)
 
-	-- Wir speichern die gedrückte Taste direkt in unserer Skript-Variable 'savedToggle'
 	local toggleuikey = Settings:keybind(
 		"Toggle UI",
 		"settingsToggleKey",
@@ -109,34 +107,21 @@ return function(Vantex)
 		Vantex:Notify({ Title = "Copied", Content = "Discord link copied.", Duration = 3, Image = "check" })
 	end)
 
-	-------------------------------------------------------------------
-	-- KORRIGIERTER LIVE-KEYBIND CONTROLLER
-	-------------------------------------------------------------------
 	local UserInputService = game:GetService("UserInputService")
 	
 	UserInputService.InputBegan:Connect(function(input, gameProcessed)
 		if gameProcessed then return end 
-		
-		-- Nur Tastatur-Eingaben erlauben (ignoriert Maus-Klicks wie rechte Maustaste!)
 		if input.UserInputType ~= Enum.UserInputType.Keyboard then return end
-		
-		-- Wir nutzen direkt die Variable 'savedToggle', die oben im Callback live aktualisiert wird!
 		local currentKeyStr = tostring(savedToggle)
-		
-		-- Säuberung falls "Enum.KeyCode. taste" zurückgegeben wird
 		if currentKeyStr:sub(1, 13) == "Enum.KeyCode." then
 			currentKeyStr = currentKeyStr:sub(14)
 		end
-		
 		local success, targetKeyCode = pcall(function()
 			return Enum.KeyCode[currentKeyStr]
 		end)
-		
-		-- Nur ausführen, wenn wir eine gültige Taste haben und diese NICHT Unknown ist
 		if success and targetKeyCode and targetKeyCode ~= Enum.KeyCode.Unknown then
 			if input.KeyCode == targetKeyCode then
 				local currentVisibility = window:IsVisible()
-				if currentVisibility == nil then print("Fehler beim lesen der Visibility") end
 				Vantex:SetVisible(not currentVisibility)
 			end
 		end
