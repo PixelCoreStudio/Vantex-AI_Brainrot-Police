@@ -25,7 +25,7 @@ return function(Vantex)
 		TabsPosition    = "Left",
 		Theme           = savedTheme,
 		
-		ToggleUIKeybind = "F24",
+		ToggleUIKeybind = Enum.KeyCode.F15,
 		
 		ConfigurationSaving = {
 			Enable     = true,
