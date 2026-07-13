@@ -130,6 +130,7 @@ return function(Vantex)
 				end
 			end)
 		end)
+	end)
 
 	Settings:toggle("Disable 3D Rendering", "disable3d", false, function(state)
 		RunService:Set3dRenderingEnabled(not state)
