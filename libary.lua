@@ -392,7 +392,7 @@ function module:win(config)
 	end
 
 	function module:SetVisible(visible)
-		setUIVisiblility(visible)
+		setUIVisibility(visible)
 	end
 
 	function module:IsVisible()
