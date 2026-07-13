@@ -391,10 +391,6 @@ function module:win(config)
 		end
 	end
 
-	function module:SetVisible(visible)
-		setUIVisibility(visible)
-	end
-
 	function module:IsVisible()
 		return main.Visible
 	end
@@ -700,6 +696,10 @@ function module:win(config)
 		if blurEffect then
 			ts:Create(blurEffect, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), { Size = visible and theme.Blur or 0 }):Play()
 		end
+	end
+
+	function module:SetVisible(visible)
+		setUIVisibility(visible)
 	end
 
 	mobileBtn.MouseButton1Click:Connect(function() setUIVisibility(true) end)
