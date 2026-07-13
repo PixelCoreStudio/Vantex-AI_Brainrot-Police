@@ -104,6 +104,7 @@ local function loadGameScript()
 			tabs.Game:CreateParagraph({ Title = "Parse Error", Content = tostring(loadErr) })
 		end
 	else
+		print("No script for this game")
 		tabs.Game:CreateParagraph({
 			Title = "No Script Available",
 			Content = "There is no script for this game yet. (PlaceId: " .. placeId .. ")",
