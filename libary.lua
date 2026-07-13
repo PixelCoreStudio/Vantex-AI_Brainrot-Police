@@ -395,6 +395,10 @@ function module:win(config)
 		setUIVisiblility(visible)
 	end
 
+	function module:IsVisible()
+		return main.Visible
+	end
+
 	-------------------------------------------------------------------
 	-- DISCORD SYSTEM
 	-------------------------------------------------------------------
