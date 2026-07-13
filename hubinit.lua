@@ -122,4 +122,12 @@ else
 			tabs.Game:CreateParagraph({ Title = "Runtime Error", Content = tostring(runErr) })
 		end
 	end
+
+end
+if getgenv().VantexAutoLoad and queue_on_teleport then
+	pcall(function()
+		queue_on_teleport(
+			'getgenv().VantexAutoLoad = true; loadstring(game:HttpGet("' .. getgitpath() .. 'hubinit.lua"))()'
+		)
+	end)
 end
