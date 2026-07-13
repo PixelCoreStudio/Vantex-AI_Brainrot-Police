@@ -75,23 +75,26 @@ end)
 
 local placeId = tostring(game.PlaceId)
 
-local ok, gamePath = pcall()
-	return game:HttpGet(getgitpath("games/"  .. placeId .. ".lua"))
-end
+local ok, gamePath = pcall(function()
+	return game:HttpGet(getgitpath("games") .. placeId .. ".lua")
+end)
+
 if not ok or #gamePath == 0 or gamePath == "404: Not Found" then
 	local handledLocally = false
-	local src
+
 	if getgenv().FileScripts then
 		if isfile("games/" .. placeId .. ".lua") then
 			local gameModule = loadstring(readfile("games/" .. placeId .. ".lua"))()
 			if type(gameModule) == "function" then
-			local ok2, runErr = pcall(gameModule, tabs.Game)
-			if not ok2 then
-				tabs.Game:CreateParagraph({ Title = "Runtime Error", Content = tostring(runErr) })
+				local ok2, runErr = pcall(gameModule, tabs.Game)
+				if not ok2 then
+					tabs.Game:CreateParagraph({ Title = "Runtime Error", Content = tostring(runErr) })
+				end
 			end
 			handledLocally = true
 		end
 	end
+
 	if not handledLocally then
 		tabs.Game:CreateParagraph({
 			Title = "No script Available",
@@ -114,8 +117,9 @@ if not ok or #gamePath == 0 or gamePath == "404: Not Found" then
 else
 	local gameModule = loadstring(gamePath)()
 	if type(gameModule) == "function" then
-	local ok2, runErr = pcall(gameModule, tabs.Game)
-	if not ok2 then
-		tabs.Game:CreateParagraph({ Title = "Runtime Error", Content = tostring(runErr) })
+		local ok2, runErr = pcall(gameModule, tabs.Game)
+		if not ok2 then
+			tabs.Game:CreateParagraph({ Title = "Runtime Error", Content = tostring(runErr) })
+		end
 	end
 end
