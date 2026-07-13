@@ -76,45 +76,51 @@ end)
 local placeId = tostring(game.PlaceId)
 
 local function loadGameScript()
-	local src
-
-	if getgenv().FileScripts then
-		local path = "games/" .. placeId .. ".lua"
-		if isfile and isfile(path) then src = readfile(path) end
+	local ok, gamePath = pcall()
+		return game:HttpGet(getgitpath("games/"  .. placeId .. ".lua"))
 	end
+	if not ok or #gamePath == 0 or gamePath == "404: Not Found" then
+		local handledLocally = false
+		local src
 
-	if not src then
-		local ok, res = pcall(game.HttpGet, game, getgitpath("games") .. placeId .. ".lua")
-		if ok and type(res) == "string" and not res:match("^404") and not res:match("Not Found") then
-			src = res
-		end
-	end
-
-	if src then
-		print("src available")
-		local fn, loadErr = loadstring(src)
-		if fn then
-			print("idk 1")
-			local gameModule = fn()
-			if type(gameModule) == "function" then
-				print("idk 2")
+		if getgenv().FileScripts then
+			if isfile("games/" .. placeId .. ".lua") then
+				local gameModule = loadstring(readfile("games/" .. placeId .. ".lua"))()
+				if type(gameModule) == "function" then
 				local ok2, runErr = pcall(gameModule, tabs.Game)
 				if not ok2 then
-					print("idk 3")
 					tabs.Game:CreateParagraph({ Title = "Runtime Error", Content = tostring(runErr) })
 				end
+				handledLocally = true
 			end
-		else
-			print("idk 4")
-			tabs.Game:CreateParagraph({ Title = "Parse Error", Content = tostring(loadErr) })
+		end
+
+		if not handledLocally then
+			tabs.Game:CreateParagraph({
+				Title = "No script Available",
+				Content = "There is no script for this game yet. (PlaceId: " .. placeId .. ")",
+			})
+			tabs.Game:CreateParagraph({
+				Title = "You have a script or want one for this game?",
+				Content = "Come to the discord and request the game. If you have a script for it and want to share feel free to put it in the request."
+			})
+			tabs.Game:button("Copy Discord Link", function()
+				local clip = setclipboard or toclipboard
+				if clip then
+					pcall(clip, "https://discord.gg/AqZmmXQDm3")
+					Vantex:Notify({ Title = "Copied", Content = "Discord link copied", Duration = 3, Image = "check" })
+				else
+					Vantex:Notify({ Title = "Copie Failed", Content = "There was an error while the copying process.", Duration = 3, Image = "check" })
+				end
+			end)
 		end
 	else
-		print("No script for this game")
-		tabs.Game:CreateParagraph({
-			Title = "No Script Available",
-			Content = "There is no script for this game yet. (PlaceId: " .. placeId .. ")",
-		})
-		tabs.Game:label("Join the Discord to request support for this game.")
+		local gameModule = loadstring(gamePath)()
+		if type(gameModule) == "function" then
+		local ok2, runErr = pcall(gameModule, tabs.Game)
+		if not ok2 then
+			tabs.Game:CreateParagraph({ Title = "Runtime Error", Content = tostring(runErr) })
+		end
 	end
 end
 
