@@ -391,6 +391,10 @@ function module:win(config)
 		end
 	end
 
+	function module:SetVisible(visible)
+		setUIVisiblility(visible)
+	end
+
 	-------------------------------------------------------------------
 	-- DISCORD SYSTEM
 	-------------------------------------------------------------------
