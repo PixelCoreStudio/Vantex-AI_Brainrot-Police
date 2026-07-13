@@ -28,24 +28,15 @@ setupHome(tabs.Home)
 
 local gamelistData = safeLoad(getgitpath() .. "gamelist.lua", "gamelist.lua")
 
-local TeleportService = game:GetService("TeleportService")
+local ExperienceService = game:GetService("ExperienceService")
 
 local function teleportTo(entry)
-	local ok, err = pcall(function() TeleportService:Teleport(entry.GameId) end)
-	if not ok then
-		if tostring(err):find("773") then
-			local url = "https://www.roblox.com/games/" .. tostring(entry.GameId)
-			local clip = setclipboard or toclipboard
-			if clip then
-				pcall(clip, url)
-				Vantex:Notify({ Title = "Link kopiert", Content = entry.Name .. " – Teleport gesperrt, Link in Zwischenablage kopiert.", Duration = 5, Image = "copy" })
-			else
-				Vantex:Notify({ Title = "Teleport gesperrt", Content = "Error 773 – öffne https://www.roblox.com/games/" .. tostring(entry.GameId) .. " manuell.", Duration = 6, Image = "alert-triangle" })
-			end
-		else
-			Vantex:Notify({ Title = "Teleport Failed", Content = tostring(err), Duration = 4, Image = "alert-triangle" })
-		end
-	end
+    local ok, err = pcall(function()
+        ExperienceService:LaunchExperience({ placeId = entry.GameId })
+    end)
+    if not ok then
+        Vantex:Notify({ Title = "Teleport Failed", Content = tostring(err), Duration = 4, Image = "alert-triangle" })
+    end
 end
 
 local searchBox = tabs.GameList:textbox("Search", "gameListSearch", "", function() end, {
