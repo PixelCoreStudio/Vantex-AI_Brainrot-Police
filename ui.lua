@@ -65,7 +65,7 @@ return function(Vantex)
 	local toggleuikey = Settings:keybind(
 		"Toggle UI",
 		"settingsToggleKey",
-		keyContainer.Current,
+		savedToggle,
 		function(key)
 			local currentVisibility = window:IsVisible()
 			Vantex:SetVisible(not currentVisibility)
