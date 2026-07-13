@@ -100,22 +100,36 @@ return function(Vantex)
 		getgenv().VantexAutoLoad = state
 	end)
  
-	game:BindToClose(function()
-		if not autoRejoin then return end
+	task.spawn(function()
+		local CoreGui = game:GetService("CoreGui")
+		local promptGui = CoreGui:WaitForChild("RobloxPromptGui", 30)
+		if not promptGui then return end
+		local overlay = promptGui:WaitForChild("promptOverlay", 30)
+		if not overlay then return end
  
-		local TeleportService = game:GetService("TeleportService")
-		local player = game:GetService("Players").LocalPlayer
+		overlay.ChildAdded:Connect(function(child)
+			if not autoRejoin then return end
+			if child.Name ~= "ErrorPrompt" then return end
  
-		pcall(function()
-			if queue_on_teleport then
-				queue_on_teleport('loadstring(game:HttpGet("' .. getgitpath() .. 'hubinit.lua"))()')
-			end
+			local TeleportService = game:GetService("TeleportService")
+			local player = game:GetService("Players").LocalPlayer
+ 
+			pcall(function()
+				if queue_on_teleport then
+					queue_on_teleport('loadstring(game:HttpGet("' .. getgitpath() .. 'hubinit.lua"))()')
+				end
+			end)
+ 
+			task.spawn(function()
+				while autoRejoin do
+					local ok = pcall(function()
+						TeleportService:Teleport(game.PlaceId, player)
+					end)
+					if ok then break end
+					task.wait(2)
+				end
+			end)
 		end)
- 
-		pcall(function()
-			TeleportService:Teleport(game.PlaceId, player)
-		end)
-	end)
 
 	Settings:toggle("Disable 3D Rendering", "disable3d", false, function(state)
 		RunService:Set3dRenderingEnabled(not state)
