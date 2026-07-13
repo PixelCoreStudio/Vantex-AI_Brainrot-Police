@@ -1533,6 +1533,14 @@ function module:win(config)
 		loadingFrame:Destroy()
 	end)
 
+	function sections:SetVisible(visible)
+		setUIVisibility(visible)
+	end
+
+	function sections:IsVisible()
+		return main.Visible
+	end
+
 	return sections
 end
 
