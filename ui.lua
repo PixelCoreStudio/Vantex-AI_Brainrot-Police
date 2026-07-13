@@ -5,9 +5,7 @@ return function(Vantex)
 
 	local configPath = "VantexAiBrainrotPolice/Config.json"
 	local savedTheme  = "default"
-	local KeyBind = Enum.KeyCode.
 	local savedToggle = "K"
-
 	if isfile and isfile(configPath) then
 		local ok, data = pcall(function()
 			return HttpService:JSONDecode(readfile(configPath))
@@ -64,12 +62,13 @@ return function(Vantex)
 		{ Save = true }
 	)
 
-	Settings:keybind(
+	local toggleuikey = Settings:keybind(
 		"Toggle UI",
 		"settingsToggleKey",
-		savedToggle,
+		keyContainer.Current,
 		function(key)
-			return tostring(key)
+			local currentVisibility = window:IsVisible()
+			Vantex:SetVisible(not currentVisibility)
 		end,
 		{ Save = true }
 	)
