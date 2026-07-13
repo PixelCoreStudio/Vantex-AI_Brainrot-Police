@@ -67,6 +67,7 @@ return function(Vantex)
 		"settingsToggleKey",
 		savedToggle,
 		function(key)
+			savedToggle = key
 			local currentVisibility = window:IsVisible()
 			Vantex:SetVisible(not currentVisibility)
 		end,
@@ -103,7 +104,7 @@ return function(Vantex)
 		if clip then pcall(clip, "https://discord.gg/AqZmmXQDm3") end
 		Vantex:Notify({ Title = "Copied", Content = "Discord link copied.", Duration = 3, Image = "check" })
 	end)
-
+	
 	return {
 		Home     = Home,
 		Game     = Game,
