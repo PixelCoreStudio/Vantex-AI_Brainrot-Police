@@ -1,7 +1,6 @@
 return function(Vantex)
 	local HttpService = game:GetService("HttpService")
 	local RunService  = game:GetService("RunService")
-	local VirtualUser = game:GetService("VirtualUser")
 
 	local configPath = "VantexAiBrainrotPolice/Config.json"
 	local savedTheme  = "default"
@@ -78,57 +77,51 @@ return function(Vantex)
 
 	Settings:CreateDivider()
 
-	local afkConn
-	Settings:toggle("Anti-AFK", "antiAfk", false, function(state)
-		if state then
-			afkConn = game:GetService("Players").LocalPlayer.Idled:Connect(function()
-				VirtualUser:Button2Down(Vector2.new(0, 0), CFrame.new())
-				task.wait(1)
-				VirtualUser:Button2Up(Vector2.new(0, 0), CFrame.new())
-			end)
-		else
-			if afkConn then afkConn:Disconnect(); afkConn = nil end
-		end
-	end, { Save = true })
-
 	local autoRejoin = false
 	Settings:toggle("Auto Rejoin on Kick", "autoRejoin", false, function(state)
 		autoRejoin = state
 	end, { Save = true })
- 
+
+	-- Session-only: NOT passed {Save = true}, so it's never written to Config.json
+	-- and is always off again after a fresh Roblox restart.
+	-- queue_on_teleport is called right here, inside the callback, so it fires
+	-- reliably every time the state is known (both on manual toggle AND on the
+	-- initial load, when the widget reports back the restored getgenv() state) —
+	-- instead of relying on a check at the very end of hubinit.lua, which can run
+	-- before the toggle has reported its state back.
 	Settings:toggle("Auto-Load on Join (this session)", "sessionAutoLoad", getgenv().VantexAutoLoad or false, function(state)
 		getgenv().VantexAutoLoad = state
-	end)
- 
-	task.spawn(function()
-		local CoreGui = game:GetService("CoreGui")
-		local promptGui = CoreGui:WaitForChild("RobloxPromptGui", 30)
-		if not promptGui then return end
-		local overlay = promptGui:WaitForChild("promptOverlay", 30)
-		if not overlay then return end
- 
-		overlay.ChildAdded:Connect(function(child)
-			if not autoRejoin then return end
-			if child.Name ~= "ErrorPrompt" then return end
- 
-			local TeleportService = game:GetService("TeleportService")
-			local player = game:GetService("Players").LocalPlayer
- 
+		if state and queue_on_teleport then
 			pcall(function()
-				if queue_on_teleport then
-					queue_on_teleport('loadstring(game:HttpGet("' .. getgitpath() .. 'hubinit.lua"))()')
-				end
+				queue_on_teleport('getgenv().VantexAutoLoad = true; loadstring(game:HttpGet("' .. getgitpath() .. 'hubinit.lua"))()')
 			end)
- 
-			task.spawn(function()
-				while autoRejoin do
-					local ok = pcall(function()
-						TeleportService:Teleport(game.PlaceId, player)
-					end)
-					if ok then break end
-					task.wait(2)
-				end
-			end)
+		end
+	end)
+
+	-- Client-side kick detection via GuiService.ErrorMessageChanged — this is
+	-- the native signal Roblox fires when the client shows a kick/disconnect
+	-- error, and is more reliable than watching internal CoreGui structure
+	-- (which can change between Roblox client versions).
+	game:GetService("GuiService").ErrorMessageChanged:Connect(function()
+		if not autoRejoin then return end
+
+		pcall(function()
+			if queue_on_teleport then
+				queue_on_teleport('loadstring(game:HttpGet("' .. getgitpath() .. 'hubinit.lua"))()')
+			end
+		end)
+
+		local TeleportService = game:GetService("TeleportService")
+		local player = game:GetService("Players").LocalPlayer
+
+		task.spawn(function()
+			while autoRejoin do
+				local ok = pcall(function()
+					TeleportService:Teleport(game.PlaceId, player)
+				end)
+				if ok then break end
+				task.wait(2)
+			end
 		end)
 	end)
 
