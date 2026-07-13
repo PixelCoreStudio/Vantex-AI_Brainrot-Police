@@ -5,6 +5,7 @@ return function(Vantex)
 
 	local configPath = "VantexAiBrainrotPolice/Config.json"
 	local savedTheme  = "default"
+	local KeyBind = Enum.KeyCode.
 	local savedToggle = "K"
 
 	if isfile and isfile(configPath) then
@@ -67,8 +68,8 @@ return function(Vantex)
 		"Toggle UI",
 		"settingsToggleKey",
 		savedToggle,
-		function()
-			window:SetVisible(not window:IsVisible())
+		function(key)
+			return tostring(key)
 		end,
 		{ Save = true }
 	)
