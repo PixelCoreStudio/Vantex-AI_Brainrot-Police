@@ -96,6 +96,10 @@ return function(Vantex)
 		autoRejoin = state
 	end, { Save = true })
  
+	Settings:toggle("Auto-Load on Join (this session)", "sessionAutoLoad", getgenv().VantexAutoLoad or false, function(state)
+		getgenv().VantexAutoLoad = state
+	end)
+ 
 	game:BindToClose(function()
 		if not autoRejoin then return end
  
