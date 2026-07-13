@@ -26,7 +26,7 @@ return function(Vantex)
 		Theme           = savedTheme,
 		
 		-- Wir lassen den Library-Keybind stumm auf Unknown, damit er uns nicht stört
-		ToggleUIKeybind = Enum.KeyCode.Unknown, 
+		ToggleUIKeybind = "", 
 		
 		ConfigurationSaving = {
 			Enable     = true,
