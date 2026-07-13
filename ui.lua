@@ -136,6 +136,7 @@ return function(Vantex)
 		if success and targetKeyCode and targetKeyCode ~= Enum.KeyCode.Unknown then
 			if input.KeyCode == targetKeyCode then
 				local currentVisibility = window:IsVisible()
+				if currentVisibility == nil then print("Fehler beim lesen der Visibility") end
 				Vantex:SetVisible(not currentVisibility)
 			end
 		end
