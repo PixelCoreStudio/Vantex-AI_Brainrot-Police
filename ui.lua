@@ -24,6 +24,7 @@ return function(Vantex)
 		ShowText        = "Vantex AI/Brainrot Police",
 		TabsPosition    = "Left",
 		Theme           = savedTheme,
+		ToggleUIKeybind = Enum.KeyCode.Unknown, 
 		ConfigurationSaving = {
 			Enable     = true,
 			FolderName = "VantexAiBrainrotPolice",
@@ -67,8 +68,8 @@ return function(Vantex)
 		"settingsToggleKey",
 		savedToggle,
 		function(key)
-			local currentVisibility = window:IsVisible()
-			Vantex:SetVisible(not currentVisibility)
+			savedToggle = tostring(key)
+			return savedToggle
 		end,
 		{ Save = true }
 	)
@@ -105,25 +106,23 @@ return function(Vantex)
 	end)
 
 	local UserInputService = game:GetService("UserInputService")
-	local uiVisible = true
-
+	
 	UserInputService.InputBegan:Connect(function(input, gameProcessed)
-		if gameProcessed then return end 
+		if gameProcessed then return end
 		
-		local rawKey = toggleuikey:Get()
-		local targetKeyCode = nil
+		local currentKeyStr = tostring(toggleuikey:Get())
 		
-		if typeof(rawKey) == "EnumItem" then
-			targetKeyCode = rawKey
-		elseif type(rawKey) == "string" then
-			pcall(function()
-				targetKeyCode = Enum.KeyCode[rawKey]
-			end)
+		if currentKeyStr:sub(1, 13) == "Enum.KeyCode." then
+			currentKeyStr = currentKeyStr:sub(14)
 		end
 		
-		if targetKeyCode and input.KeyCode == targetKeyCode then
-			uiVisible = not uiVisible
-			Vantex:SetVisible(uiVisible)
+		local success, targetKeyCode = pcall(function()
+			return Enum.KeyCode[currentKeyStr]
+		end)
+		
+		if success and input.KeyCode == targetKeyCode then
+			local currentVisibility = window:IsVisible()
+			Vantex:SetVisible(not currentVisibility)
 		end
 	end)
 	
