@@ -91,16 +91,21 @@ local function loadGameScript()
 	end
 
 	if src then
+		print("src available")
 		local fn, loadErr = loadstring(src)
 		if fn then
+			print("idk 1")
 			local gameModule = fn()
 			if type(gameModule) == "function" then
+				print("idk 2")
 				local ok2, runErr = pcall(gameModule, tabs.Game)
 				if not ok2 then
+					print("idk 3")
 					tabs.Game:CreateParagraph({ Title = "Runtime Error", Content = tostring(runErr) })
 				end
 			end
 		else
+			print("idk 4")
 			tabs.Game:CreateParagraph({ Title = "Parse Error", Content = tostring(loadErr) })
 		end
 	else
