@@ -67,7 +67,6 @@ return function(Vantex)
 		"settingsToggleKey",
 		savedToggle,
 		function(key)
-			savedToggle = key
 			local currentVisibility = window:IsVisible()
 			Vantex:SetVisible(not currentVisibility)
 		end,
@@ -103,6 +102,23 @@ return function(Vantex)
 		local clip = setclipboard or toclipboard
 		if clip then pcall(clip, "https://discord.gg/AqZmmXQDm3") end
 		Vantex:Notify({ Title = "Copied", Content = "Discord link copied.", Duration = 3, Image = "check" })
+	end)
+
+	local UserInputService = game:GetService("UserInputService")
+	
+	UserInputService.InputBegan:Connect(function(input, gameProcessed)
+		if gameProcessed then return end 
+		
+		local currentKeyStr = tostring(toggleuikey:Get())
+		
+		local success, targetKeyCode = pcall(function()
+			return Enum.KeyCode[currentKeyStr]
+		end)
+		
+		if success and input.KeyCode == targetKeyCode then
+			local currentVisibility = window:IsVisible()
+			Vantex:SetVisible(not currentVisibility)
+		end
 	end)
 	
 	return {
