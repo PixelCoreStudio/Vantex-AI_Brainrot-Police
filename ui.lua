@@ -91,6 +91,28 @@ return function(Vantex)
 		end
 	end, { Save = true })
 
+	local autoRejoin = false
+	Settings:toggle("Auto Rejoin on Kick", "autoRejoin", false, function(state)
+		autoRejoin = state
+	end, { Save = true })
+ 
+	game:BindToClose(function()
+		if not autoRejoin then return end
+ 
+		local TeleportService = game:GetService("TeleportService")
+		local player = game:GetService("Players").LocalPlayer
+ 
+		pcall(function()
+			if queue_on_teleport then
+				queue_on_teleport('loadstring(game:HttpGet("' .. getgitpath() .. 'hubinit.lua"))()')
+			end
+		end)
+ 
+		pcall(function()
+			TeleportService:Teleport(game.PlaceId, player)
+		end)
+	end)
+
 	Settings:toggle("Disable 3D Rendering", "disable3d", false, function(state)
 		RunService:Set3dRenderingEnabled(not state)
 	end, { Save = true })
