@@ -122,12 +122,17 @@ return function(Vantex)
 	Credits:CreateDivider()
 	Credits:CreateParagraph({ Title = "Developer", Content = "Pixel Core" })
 	Credits:CreateParagraph({ Title = "Contributors", Content = "none" })
-	Credits:CreateParagraph({ Title = "Idea", Content = "veahz"})
+	Credits:CreateParagraph({ Title = "Idea", Content = "vaehz"})
 	Credits:CreateDivider()
-	Credits:label("Join the Discord for updates and support.", "discord")
+	Credits:label("Join the Discord for updates and support. And don't forget to cheack out vaehz!", "discord")
 	Credits:button("Copy Discord Link", function()
 		local clip = setclipboard or toclipboard
 		if clip then pcall(clip, "https://discord.gg/AqZmmXQDm3") end
+		Vantex:Notify({ Title = "Copied", Content = "Discord link copied.", Duration = 3, Image = "check" })
+	end)
+	Credits:button("Vaehz Website", function()
+		local clip = setclipboard or toclipboard
+		if clip then pcall(clip, "https://wearentdevs.net/") end
 		Vantex:Notify({ Title = "Copied", Content = "Discord link copied.", Duration = 3, Image = "check" })
 	end)
 
