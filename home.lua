@@ -16,7 +16,8 @@ return function(tab)
 	local AUTHOR      = "Pixel Core"
 
 	local ANNOUNCEMENTS = {
-		"Just released games coming soon!",
+		"Added Lick a Brainrot.",
+		"Updated Beach Escape win.",
 	}
 
 	local STATUS_COLORS = {
