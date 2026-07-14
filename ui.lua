@@ -19,7 +19,7 @@ return function(Vantex)
 		Name            = "Vantex AI/Brainrot Police",
 		Icon            = "siren",
 		LoadingTitle    = "Vantex AI/Brainrot Police",
-		LoadingSubtitle = "by Pixel Core",
+		LoadingSubtitle = "by Void Core",
 		ShowText        = "Vantex AI/Brainrot Police",
 		TabsPosition    = "Left",
 		Theme           = savedTheme,
@@ -120,7 +120,7 @@ return function(Vantex)
 
 	Credits:CreateParagraph({ Title = "Vantex AI/Brainrot Police", Content = "Version 1.0.0" })
 	Credits:CreateDivider()
-	Credits:CreateParagraph({ Title = "Developer", Content = "Pixel Core" })
+	Credits:CreateParagraph({ Title = "Developer", Content = "Void Core" })
 	Credits:CreateParagraph({ Title = "Contributors", Content = "none" })
 	Credits:CreateParagraph({ Title = "Idea", Content = "vaehz"})
 	Credits:CreateDivider()
