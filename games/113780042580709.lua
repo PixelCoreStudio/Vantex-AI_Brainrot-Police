@@ -3,25 +3,44 @@ ws.StreamingEnabled = false
 local pl = game:GetService("Players")
 local lpl = pl.LocalPlayer
 local addSpeed = game:GetService("ReplicatedStorage").Events.AddSpeed
+local ATTRIBUTE_NAME = "WinAmount"
 _G.AutoSpeed = false
 _G.TpWins = false
 
-local baseCFrame = CFrame.new(-1281.30994, 6.62487507, 1144.99719, 2.67028809e-05, 1, -2.60770321e-07, -0.999809265, 2.67028809e-05, 0.0195315108, 0.0195315108, -2.60770321e-07, 0.999809265)
-
-local targetCFrame = baseCFrame + Vector3.new(0, 0.5, 0)
-
-local function teleport()
-    local character = lpl.Character or localPlayer.CharacterAdded:Wait()
-    local rootPart = character:WaitForChild("HumanoidRootPart")
-    
-    if rootPart then
-        -- Teleportiert den Spieler sicher an die neue Position
-        rootPart.CFrame = targetCFrame
-    end
-end
-
 return function(section)
     local e = loadstring(game:HttpGet(getgitpath("src").."elements.lua"))()(section)
+
+    local function getAvailableWinAmounts()
+        local amounts = {""}
+        local unique = {}
+        for _, object in ipairs(ws:GetDescendants()) do
+            local winAmount = object:GetAttribute(ATTRIBUTE_NAME)
+            if winAmount ~= nil then
+                local amountStr = tostring(winAmount)
+                if not unique[amountStr] then
+                    unique[amountStr] = true
+                    table.insert(amounts, amountStr)
+                end
+            end
+        end
+        return amounts
+    end
+
+    local function teleportToWinAmount(amountStr)
+        local targetVal = tonumber(amountStr)
+        if not targetVal then return end
+
+        for _, object in ipairs(ws:GetDescendants()) do
+            local winAmount = object:GetAttribute(ATTRIBUTE_NAME)
+            if winAmount == targetVal then
+                local targetCFrame = object:IsA("PVInstance") and object:GetPivot() or (object:IsA("BasePart") and object.CFrame)
+                if targetCFrame and lpl.Character and lpl.Character:FindFirstChild("HumanoidRootPart") then
+                    lpl.Character.HumanoidRootPart.CFrame = targetCFrame
+                    break
+                end
+            end
+        end
+    end
 
     e:separator("Speed")
 
@@ -36,8 +55,19 @@ return function(section)
 
     e:separator("Teleport")
 
+    local amountDropdown
+
+    local amountDropdown
+    amountDropdown = e:dropdown("Wähle WinAmount", getAvailableWinAmounts(), "", function(value)
+        selectedAmount = value
+    end)
+
     e:button("TP max wins", function()
-        teleport()
+        if selectedAmount ~= "" then
+            teleportToWinAmount(selectedAmount)
+        else
+            print("Please select you amount first!")
+        end
     end)
     e:toggle("TP max wins loop", false, function(v)
         _G.TpWins = v
@@ -47,4 +77,10 @@ return function(section)
             wait()
         end
     end)
+
+    local function updateDropdown()
+        amountDropdown:Refresh(getAvailableWinAmounts(), selectedAmount)
+    end
+    ws.DescendantAdded:Connect(updateDropdown)
+    ws.DescendantRemoving:Connect(updateDropdown)
 end
