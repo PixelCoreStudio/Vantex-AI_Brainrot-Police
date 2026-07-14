@@ -31,12 +31,12 @@ local gamelistData = safeLoad(getgitpath() .. "gamelist.lua", "gamelist.lua")
 local ExperienceService = game:GetService("ExperienceService")
 
 local function teleportTo(entry)
-    local ok, err = pcall(function()
-        ExperienceService:LaunchExperience({ placeId = entry.GameId })
-    end)
-    if not ok then
-        Vantex:Notify({ Title = "Teleport Failed", Content = tostring(err), Duration = 4, Image = "alert-triangle" })
-    end
+	local ok, err = pcall(function()
+		ExperienceService:LaunchExperience({ placeId = entry.GameId })
+	end)
+	if not ok then
+		Vantex:Notify({ Title = "Teleport Failed", Content = tostring(err), Duration = 4, Image = "alert-triangle" })
+	end
 end
 
 local searchBox = tabs.GameList:textbox("Search", "gameListSearch", "", function() end, {
@@ -74,29 +74,28 @@ task.defer(function()
 end)
 
 local placeId = tostring(game.PlaceId)
+local handledLocally = false
 
-local ok, gamePath = pcall(function()
-	return game:HttpGet(getgitpath("games") .. placeId .. ".lua")
-end)
-
-if not ok or #gamePath == 0 or gamePath == "404: Not Found" then
-	local handledLocally = false
-
-	if getgenv().FileScripts then
-		if isfile("games/" .. placeId .. ".lua") then
+if getgenv().FileScripts then
+	if isfile("games/" .. placeId .. ".lua") then
 		print("[Vantex] Loading local script for PlaceId: " .. placeId)
 		local gameModule = loadstring(readfile("games/" .. placeId .. ".lua"))()
-			if type(gameModule) == "function" then
-				local ok2, runErr = pcall(gameModule, tabs.Game)
-				if not ok2 then
-					tabs.Game:CreateParagraph({ Title = "Runtime Error", Content = tostring(runErr) })
-				end
+		if type(gameModule) == "function" then
+			local ok2, runErr = pcall(gameModule, tabs.Game)
+			if not ok2 then
+				tabs.Game:CreateParagraph({ Title = "Runtime Error", Content = tostring(runErr) })
 			end
-			handledLocally = true
 		end
+		handledLocally = true
 	end
+end
 
-	if not handledLocally then
+if not handledLocally then
+	local ok, gamePath = pcall(function()
+		return game:HttpGet(getgitpath("games") .. placeId .. ".lua")
+	end)
+
+	if not ok or #gamePath == 0 or gamePath == "404: Not Found" then
 		tabs.Game:CreateParagraph({
 			Title = "No script Available",
 			Content = "There is no script for this game yet. (PlaceId: " .. placeId .. ")",
@@ -114,13 +113,13 @@ if not ok or #gamePath == 0 or gamePath == "404: Not Found" then
 				Vantex:Notify({ Title = "Copie Failed", Content = "There was an error while the copying process.", Duration = 3, Image = "check" })
 			end
 		end)
-	end
-else
-	local gameModule = loadstring(gamePath)()
-	if type(gameModule) == "function" then
-		local ok2, runErr = pcall(gameModule, tabs.Game)
-		if not ok2 then
-			tabs.Game:CreateParagraph({ Title = "Runtime Error", Content = tostring(runErr) })
+	else
+		local gameModule = loadstring(gamePath)()
+		if type(gameModule) == "function" then
+			local ok2, runErr = pcall(gameModule, tabs.Game)
+			if not ok2 then
+				tabs.Game:CreateParagraph({ Title = "Runtime Error", Content = tostring(runErr) })
+			end
 		end
 	end
 end
