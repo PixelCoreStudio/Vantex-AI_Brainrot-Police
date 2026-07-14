@@ -84,7 +84,8 @@ if not ok or #gamePath == 0 or gamePath == "404: Not Found" then
 
 	if getgenv().FileScripts then
 		if isfile("games/" .. placeId .. ".lua") then
-			local gameModule = loadstring(readfile("games/" .. placeId .. ".lua"))()
+		print("[Vantex] Loading local script for PlaceId: " .. placeId)
+		local gameModule = loadstring(readfile("games/" .. placeId .. ".lua"))()
 			if type(gameModule) == "function" then
 				local ok2, runErr = pcall(gameModule, tabs.Game)
 				if not ok2 then
