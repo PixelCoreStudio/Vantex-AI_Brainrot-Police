@@ -6,7 +6,7 @@ local addSpeed = game:GetService("ReplicatedStorage").Events.AddSpeed
 _G.AutoSpeed = false
 _G.TpWins = false
 
-local baseCFrame = CFrame.new(-1268.02893, 6.74012947, 1150.88391, 2.67028809e-05, 1, -2.60770321e-07, -0.999809265, 2.67028809e-05, 0.0195315108, 0.0195315108, -2.60770321e-07, 0.999809265)
+local baseCFrame = CFrame.new(-1281.30994, 6.62487507, 1144.99719, 2.67028809e-05, 1, -2.60770321e-07, -0.999809265, 2.67028809e-05, 0.0195315108, 0.0195315108, -2.60770321e-07, 0.999809265)
 
 local targetCFrame = baseCFrame + Vector3.new(0, 0.5, 0)
 
