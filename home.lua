@@ -13,7 +13,7 @@ return function(tab)
 	local HUB_VERSION = "v1.0.0"
 	local HUB_STATUS  = "Working"   -- "Undetected" | "Detected" | "Updating"
 	local DISCORD     = "discord.gg/AqZmmXQDm3"
-	local AUTHOR      = "Pixel Core"
+	local AUTHOR      = "Void Core"
 
 	local ANNOUNCEMENTS = {
 		"Added Lick a Brainrot.",
