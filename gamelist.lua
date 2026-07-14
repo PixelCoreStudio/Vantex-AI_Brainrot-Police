@@ -17,4 +17,9 @@ return {
 		Status = "Working",
 		GameId = 112500097711893,
 	},
+	{
+		Name = "Merge for DIAMONDS!",
+		Status = "Working",
+		GameId = 132821440336521,
+	},
 }
