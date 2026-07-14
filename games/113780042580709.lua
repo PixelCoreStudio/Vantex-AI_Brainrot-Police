@@ -1,14 +1,19 @@
 local ws = game:WaitForChild("Workspace")
 ws.StreamingEnabled = false
+
 local pl = game:GetService("Players")
 local lpl = pl.LocalPlayer
 local addSpeed = game:GetService("ReplicatedStorage").Events.AddSpeed
 local ATTRIBUTE_NAME = "WinAmount"
+
 _G.AutoSpeed = false
 _G.TpWins = false
 
 return function(section)
     local e = loadstring(game:HttpGet(getgitpath("src").."elements.lua"))()(section)
+
+    local selectedAmount = "" 
+    local amountDropdown
 
     local function getAvailableWinAmounts()
         local amounts = {""}
@@ -47,17 +52,16 @@ return function(section)
     e:toggle("Auto Farm Speed", false, function(v) 
         _G.AddSpeed = v
 
-        while _G.AddSpeed == true do
-            addSpeed:FireServer()
-            wait()
-        end
+        task.spawn(function()
+            while _G.AddSpeed == true do
+                addSpeed:FireServer()
+                task.wait()
+            end
+        end)
     end)
 
-    e:separator("Telepor Test")
+    e:separator("Teleport Test")
 
-    local amountDropdown
-
-    local amountDropdown
     amountDropdown = e:dropdown("Wähle WinAmount", getAvailableWinAmounts(), "", function(value)
         selectedAmount = value
     end)
@@ -70,17 +74,22 @@ return function(section)
         if selectedAmount ~= "" then
             teleportToWinAmount(selectedAmount)
         else
-            print("Please select you amount first!")
+            print("Please select your amount first!")
         end
     end)
+
     e:toggle("TP max wins loop", false, function(v)
         _G.TpWins = v
 
-        while _G.TpWins == true do
-            if selectedAmount ~= "" then
-                teleportToWinAmount(selectedAmount)
-                wait()
-            else
-        end
+        task.spawn(function()
+            while _G.TpWins == true do
+                if selectedAmount ~= "" then
+                    teleportToWinAmount(selectedAmount)
+                    task.wait()
+                else
+                    task.wait(1) 
+                end
+            end
+        end)
     end)
 end
