@@ -74,9 +74,6 @@ task.defer(function()
 end)
 
 local placeId = tostring(game.PlaceId)
-print("[Vantex] PlaceId: " .. placeId)
-print("[Vantex] FileScripts: " .. tostring(getgenv().FileScripts))
-print("[Vantex] isfile: " .. tostring(isfile("games/" .. placeId .. ".lua")))
 local handledLocally = false
 
 if getgenv().FileScripts then
