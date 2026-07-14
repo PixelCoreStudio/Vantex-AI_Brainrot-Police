@@ -1,4 +1,5 @@
 local ws = game:WaitForChild("Workspace")
+game:GetService("GuiService"):SetGameplayPausedNotificationEnabled(false)
 ws.StreamingEnabled = false
 
 local pl = game:GetService("Players")
