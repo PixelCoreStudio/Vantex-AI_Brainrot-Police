@@ -73,12 +73,14 @@ return function(section)
             print("Please select you amount first!")
         end
     end)
-    -- e:toggle("TP max wins loop", false, function(v)
-    --     _G.TpWins = v
+    e:toggle("TP max wins loop", false, function(v)
+        _G.TpWins = v
 
-    --     while _G.TpWins == true do
-    --         teleport()
-    --         wait()
-    --     end
-    -- end)
+        while _G.TpWins == true do
+            if selectedAmount ~= "" then
+                teleportToWinAmount(selectedAmount)
+                wait()
+            else
+        end
+    end)
 end
