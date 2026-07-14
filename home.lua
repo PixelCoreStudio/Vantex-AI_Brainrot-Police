@@ -16,7 +16,7 @@ return function(tab)
 	local AUTHOR      = "Void Core"
 
 	local ANNOUNCEMENTS = {
-		"Updated Beach Escape win function to work after updates.",
+		"Added WalkSpeed function to Beach Escape.",
 		"Added Merge for DIAMOND.",
 	}
 
