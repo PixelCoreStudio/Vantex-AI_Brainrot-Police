@@ -53,13 +53,17 @@ return function(section)
         end
     end)
 
-    e:separator("Teleport")
+    e:separator("Telepor Test")
 
     local amountDropdown
 
     local amountDropdown
     amountDropdown = e:dropdown("Wähle WinAmount", getAvailableWinAmounts(), "", function(value)
         selectedAmount = value
+    end)
+
+    e:button("Update Dropdown", function()
+        amountDropdown:Refresh(getAvailableWinAmounts(), selectedAmount)
     end)
 
     e:button("TP max wins", function()
@@ -69,18 +73,12 @@ return function(section)
             print("Please select you amount first!")
         end
     end)
-    e:toggle("TP max wins loop", false, function(v)
-        _G.TpWins = v
+    -- e:toggle("TP max wins loop", false, function(v)
+    --     _G.TpWins = v
 
-        while _G.TpWins == true do
-            teleport()
-            wait()
-        end
-    end)
-
-    local function updateDropdown()
-        amountDropdown:Refresh(getAvailableWinAmounts(), selectedAmount)
-    end
-    ws.DescendantAdded:Connect(updateDropdown)
-    ws.DescendantRemoving:Connect(updateDropdown)
+    --     while _G.TpWins == true do
+    --         teleport()
+    --         wait()
+    --     end
+    -- end)
 end
