@@ -70,7 +70,7 @@ return function(section)
         amountDropdown:Refresh(getAvailableWinAmounts(), selectedAmount)
     end)
 
-    e:button("TP max wins", function()
+    e:button("TP wins", function()
         if selectedAmount ~= "" then
             teleportToWinAmount(selectedAmount)
         else
@@ -78,7 +78,7 @@ return function(section)
         end
     end)
 
-    e:toggle("TP max wins loop", false, function(v)
+    e:toggle("TP wins loop", false, function(v)
         _G.TpWins = v
 
         task.spawn(function()
