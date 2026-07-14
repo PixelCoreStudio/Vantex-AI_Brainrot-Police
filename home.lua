@@ -16,8 +16,8 @@ return function(tab)
 	local AUTHOR      = "Void Core"
 
 	local ANNOUNCEMENTS = {
-		"Added Lick a Brainrot.",
-		"Updated Beach Escape win.",
+		"Updated Beach Escape win function to work after updates.",
+		"Added Merge for DIAMOND.",
 	}
 
 	local STATUS_COLORS = {
