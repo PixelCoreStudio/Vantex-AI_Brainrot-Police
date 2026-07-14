@@ -114,6 +114,19 @@ return function(Vantex)
 		end)
 	end)
 
+	local afkConn
+	Settings:toggle("Anti-AFK", "antiAfk", false, function(state)
+		if state then
+			afkConn = game:GetService("Players").LocalPlayer.Idled:Connect(function()
+				VirtualUser:Button2Down(Vector2.new(0, 0), CFrame.new())
+				task.wait(1)
+				VirtualUser:Button2Up(Vector2.new(0, 0), CFrame.new())
+			end)
+		else
+			if afkConn then afkConn:Disconnect(); afkConn = nil end
+		end
+	end, { Save = true })
+
 	Settings:toggle("Disable 3D Rendering", "disable3d", false, function(state)
 		RunService:Set3dRenderingEnabled(not state)
 	end, { Save = true })
