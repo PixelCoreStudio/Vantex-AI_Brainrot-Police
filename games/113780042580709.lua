@@ -60,9 +60,9 @@ return function(section)
         end)
     end)
 
-    e:separator("Teleport Test")
+    e:separator("Teleport")
 
-    amountDropdown = e:dropdown("Wähle WinAmount", getAvailableWinAmounts(), "", function(value)
+    amountDropdown = e:dropdown("Select Win Amount", getAvailableWinAmounts(), "", function(value)
         selectedAmount = value
     end)
 
