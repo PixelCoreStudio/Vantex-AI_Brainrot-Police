@@ -6,8 +6,22 @@ local lpl = pl.LocalPlayer
 local addSpeed = game:GetService("ReplicatedStorage").Events.AddSpeed
 local ATTRIBUTE_NAME = "WinAmount"
 
+local function getHm()
+	local char = lpl.Character
+	if char then
+		return char:FindFirstChildOfClass("Humanoid")
+	end
+	return nil
+end
+
+local ghm = getHm()
+
 _G.AutoSpeed = false
 _G.TpWins = false
+_G.WalkSpeed = 16
+_G.ActivateWalkSpeed = false
+_G.WalkSpeedBefore = ghm.WalkSpeed
+_G.WalkSpeedAfter = _G.WalkSpeed
 
 return function(section)
     local e = loadstring(game:HttpGet(getgitpath("src").."elements.lua"))()(section)
@@ -60,6 +74,31 @@ return function(section)
         end)
     end)
 
+    e:toggle("Activate Walkspeed", false, function(v)
+        local hm = getHm()
+        _G.ActivateWalkSpeed = v
+        _G.WalkSpeed = hm.WalkSpeed
+
+        if _G.ActivateWalkSpeed == false then
+            hm.WalkSpeed = _G.WalkSpeedBefore
+        else
+            hm.WalkSpeed = _G.WalkSpeedAfter
+        end
+    end)
+
+    e:slider("Walkspeed", 1, 500, _G.WalkSpeed, function(v)
+        _G.WalkSpeed = v
+        _G.WalkSpeedAfter = v
+        while _G.ActivateWalkSpeed == true do
+            local hm = getHm()
+            if hm then
+			    hm.WalkSpeed = _G.WalkSpeed
+                wait()
+            end
+            wait()
+		end
+    end)
+
     e:separator("Teleport")
 
     amountDropdown = e:dropdown("Select Win Amount", getAvailableWinAmounts(), "", function(value)
@@ -70,7 +109,7 @@ return function(section)
         amountDropdown:Refresh(getAvailableWinAmounts(), selectedAmount)
     end)
 
-    e:button("TP wins", function()
+    e:button("TP max wins", function()
         if selectedAmount ~= "" then
             teleportToWinAmount(selectedAmount)
         else
@@ -78,7 +117,7 @@ return function(section)
         end
     end)
 
-    e:toggle("TP wins loop", false, function(v)
+    e:toggle("TP max wins loop", false, function(v)
         _G.TpWins = v
 
         task.spawn(function()
