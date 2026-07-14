@@ -22,4 +22,9 @@ return {
 		Status = "Working",
 		GameId = 132821440336521,
 	},
+	{
+		Name = "+1 Speed ASMR Lava Escape",
+		Status = "Working",
+		GameId = 99396202421795,
+	},
 }
