@@ -120,7 +120,9 @@ return function(Vantex)
 				VirtualUser:Button2Down(Vector2.new(0, 0), CFrame.new())
 				task.wait(1)
 				VirtualUser:Button2Up(Vector2.new(0, 0), CFrame.new())
+				print("Player Unidled")
 			end)
+			task.wait()
 		end
 	end, { Save = true })
 
