@@ -70,7 +70,7 @@ return function(section)
         task.spawn(function()
             while _G.AddSpeed == true do
                 addSpeed:FireServer()
-                task.wait()
+                task.wait(0.02)
             end
         end)
     end)
