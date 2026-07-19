@@ -1,5 +1,4 @@
 local ws = game:WaitForChild("Workspace")
-game:GetService("GuiService"):SetGameplayPausedNotificationEnabled(false)
 ws.StreamingEnabled = false
 
 local pl = game:GetService("Players")
@@ -101,6 +100,8 @@ return function(section)
     end)
 
     e:separator("Teleport")
+
+    e:CreateParagraph({ Title = "Win Amount Info", Content = "The selectet amount might be wrong/doesnt work or a win amount doesnt appear. But thats because that game es hella AI Generated and I can't make a better detection to have it dynamic. And if I do it manually again the positions might be wrong. If you have a better detection system for the wins amount in this AI game feel free to share it." })
 
     amountDropdown = e:dropdown("Select Win Amount", getAvailableWinAmounts(), "", function(value)
         selectedAmount = value
